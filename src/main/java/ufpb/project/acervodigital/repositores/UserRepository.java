@@ -6,4 +6,5 @@ import ufpb.project.acervodigital.models.User;
 
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
+    boolean existsByEmail(String email);
 }
