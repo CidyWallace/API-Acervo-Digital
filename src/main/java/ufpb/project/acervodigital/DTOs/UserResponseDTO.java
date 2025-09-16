@@ -6,7 +6,7 @@ import java.time.LocalDate;
 
 public class UserResponseDTO {
     private Long id;
-    private String name;
+    private String nome;
     private String numeroCartao;
     private String email;
     private LocalDate dataCriacao;
@@ -20,12 +20,12 @@ public class UserResponseDTO {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public String getNome() {
+        return nome;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setNome(String nome) {
+        this.nome = nome;
     }
 
     public String getNumeroCartao() {
@@ -64,7 +64,7 @@ public class UserResponseDTO {
     public String toString() {
         return "UserDTO{" +
                 "id=" + id +
-                ", name='" + name + '\'' +
+                ", name='" + nome + '\'' +
                 ", numeroCartao='" + numeroCartao + '\'' +
                 ", email='" + email + '\'' +
                 ", dataCriacao=" + dataCriacao +

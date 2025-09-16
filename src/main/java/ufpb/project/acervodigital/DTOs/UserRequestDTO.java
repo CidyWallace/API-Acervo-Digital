@@ -1,17 +1,17 @@
 package ufpb.project.acervodigital.DTOs;
 
 public class UserRequestDTO {
-    private String name;
+    private String nome;
     private String email;
-    private String password;
+    private String senha;
     private String numeroCartao;
 
-    public String getName() {
-        return name;
+    public String getNome() {
+        return nome;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setNome(String nome) {
+        this.nome = nome;
     }
 
     public String getEmail() {
@@ -22,12 +22,12 @@ public class UserRequestDTO {
         this.email = email;
     }
 
-    public String getPassword() {
-        return password;
+    public String getSenha() {
+        return senha;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
+    public void setSenha(String senha) {
+        this.senha = senha;
     }
 
     public String getNumeroCartao() {

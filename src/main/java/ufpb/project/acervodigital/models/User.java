@@ -4,7 +4,6 @@ import jakarta.persistence.*;
 import ufpb.project.acervodigital.models.enums.StatusUsuario;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "USUARIOS")

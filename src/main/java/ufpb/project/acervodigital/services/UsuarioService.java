@@ -9,6 +9,7 @@ import ufpb.project.acervodigital.models.User;
 import ufpb.project.acervodigital.models.enums.StatusUsuario;
 import ufpb.project.acervodigital.repositores.UserRepository;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -24,6 +25,7 @@ public class UsuarioService {
             throw new UserExistsException("O Email informado já está cadastrado");
         }
         user.setStatus(StatusUsuario.ATIVO);
+        user.setDataCriacao(LocalDate.now());
         userRepository.save(user);
         return user;
     }
@@ -40,7 +42,10 @@ public class UsuarioService {
         var userExistente = userRepository.findById(id).orElseThrow(() -> new ItemNotFoundException("Usuário "+id+" não encontrado"));
 
         userExistente.setId(user.getId());
-        return userRepository.save(user);
+        userExistente.setNome(user.getNome());
+        userExistente.setEmail(user.getEmail());
+        userExistente.setStatus(user.getStatus());
+        return userRepository.save(userExistente);
     }
 
     public User atualizarStatus(Long id, StatusUsuario statusUsuario) {
