@@ -1,9 +1,68 @@
 package ufpb.project.acervodigital.controllers;
 
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+import ufpb.project.acervodigital.DTOs.AtivoDigitalRequestDTO;
+import ufpb.project.acervodigital.DTOs.AtivoDigitalResponseDTO;
+import ufpb.project.acervodigital.models.AtivoDigital;
+import ufpb.project.acervodigital.models.enums.FormatoAtivo;
+import ufpb.project.acervodigital.services.AtivoDigitalService;
 
 @RestController
-@RequestMapping("/assets")
+@RequestMapping("/api/assets")
 public class AtivoDigitalController {
+    private final ModelMapper modelMapper;
+    private final AtivoDigitalService ativoService;
+
+    public AtivoDigitalController(AtivoDigitalService ativoDigitalService, ModelMapper modelMapper) {
+        this.ativoService = ativoDigitalService;
+        this.modelMapper = modelMapper;
+    }
+
+    @GetMapping
+    public ResponseEntity<Page<AtivoDigitalResponseDTO>> findAll(
+            @RequestParam(required = false) String titulo,
+            @RequestParam(required = false) String autor,
+            @RequestParam(required = false) FormatoAtivo formato,
+            Pageable pageable
+    ) {
+        Page<AtivoDigital> ativos = ativoService.findAll(titulo, autor, formato, pageable);
+        Page<AtivoDigitalResponseDTO> dtos = ativos.map(ativo -> modelMapper.map(ativo, AtivoDigitalResponseDTO.class));
+        return ResponseEntity.ok(dtos);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<AtivoDigitalResponseDTO> findById(@PathVariable Long id) {
+        var ativo = ativoService.findById(id);
+        return ResponseEntity.ok().body(convertToDTO(ativo));
+    }
+
+    @PostMapping
+    public ResponseEntity<AtivoDigitalResponseDTO> create(@RequestBody AtivoDigitalRequestDTO ativoDigitalRequestDTO) {
+        var ativo = ativoService.save(convertToEntity(ativoDigitalRequestDTO));
+        return ResponseEntity.ok(convertToDTO(ativo));
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<AtivoDigitalResponseDTO> update(@RequestBody AtivoDigitalRequestDTO ativoDigitalRequestDTO, @PathVariable Long id) {
+        var ativo = ativoService.update(id, convertToEntity(ativoDigitalRequestDTO));
+        return ResponseEntity.ok(convertToDTO(ativo));
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> delete(@PathVariable Long id) {
+        ativoService.delete(id);
+        return ResponseEntity.noContent().build();
+    }
+
+    private AtivoDigitalResponseDTO convertToDTO(AtivoDigital ativoDigital) {
+        return modelMapper.map(ativoDigital, AtivoDigitalResponseDTO.class);
+    }
+
+    private AtivoDigital convertToEntity(AtivoDigitalRequestDTO ativoDigitalRequestDTO) {
+        return modelMapper.map(ativoDigitalRequestDTO, AtivoDigital.class);
+    }
 }
