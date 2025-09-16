@@ -4,11 +4,13 @@ import jakarta.persistence.*;
 import ufpb.project.acervodigital.models.enums.StatusUsuario;
 
 import java.time.LocalDate;
+import java.util.Collection;
 
 @Entity
 @Table(name = "USUARIOS")
 public class User {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "user_id")
     private Long id;
 
     @Column(name = "numero_cartao", unique = true)
@@ -26,6 +28,12 @@ public class User {
 
     @Enumerated(EnumType.STRING)
     private StatusUsuario status;
+
+    @OneToMany(mappedBy = "user")
+    private Collection<Emprestimo> emprestimos;
+
+    @OneToMany(mappedBy = "user")
+    private Collection<Reserva> reservas;
 
     public StatusUsuario getStatus() {
         return status;

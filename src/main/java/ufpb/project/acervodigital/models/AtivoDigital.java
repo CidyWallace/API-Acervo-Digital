@@ -3,9 +3,12 @@ package ufpb.project.acervodigital.models;
 import jakarta.persistence.*;
 import ufpb.project.acervodigital.models.enums.FormatoAtivo;
 
+import java.util.Collection;
+
 @Entity
 public class AtivoDigital {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "ativo_id")
     private Long id;
 
     private String titulo;
@@ -20,6 +23,12 @@ public class AtivoDigital {
 
     @Column(name = "licencas_disponiveis")
     private Integer licencasDisponiveis;
+
+    @OneToMany(mappedBy = "ativo")
+    private Collection<Emprestimo> emprestimos;
+
+    @OneToMany(mappedBy = "ativo")
+    private Collection<Reserva> reservas;
 
     public Integer getLicencasDisponiveis() {
         return licencasDisponiveis;

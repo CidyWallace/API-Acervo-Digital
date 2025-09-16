@@ -9,6 +9,7 @@ import java.time.LocalDate;
 public class Emprestimo {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "emprestimo_id")
     private Long id;
 
     @Column(name = "data_emprestimo")
@@ -19,6 +20,14 @@ public class Emprestimo {
 
     @Enumerated(EnumType.STRING)
     private StatusEmprestimo status;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
+
+    @ManyToOne
+    @JoinColumn(name = "ativo_id")
+    private AtivoDigital ativo;
 
     public Long getId() {
         return id;
