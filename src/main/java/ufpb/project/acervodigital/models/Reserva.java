@@ -3,7 +3,7 @@ package ufpb.project.acervodigital.models;
 import jakarta.persistence.*;
 import ufpb.project.acervodigital.models.enums.StatusReserva;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity
 public class Reserva {
@@ -13,7 +13,7 @@ public class Reserva {
     private int id;
 
     @Column(name = "data_reserva")
-    private LocalDate dataReserva;
+    private LocalDateTime dataReserva;
 
     @Enumerated(EnumType.STRING)
     private StatusReserva status;
@@ -26,6 +26,32 @@ public class Reserva {
     @JoinColumn(name = "ativo_id")
     private AtivoDigital ativo;
 
+    private Long posicaoFila;
+
+    public Long getPosicaoFila() {
+        return posicaoFila;
+    }
+
+    public void setPosicaoFila(Long posicaoFila) {
+        this.posicaoFila = posicaoFila;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public AtivoDigital getAtivo() {
+        return ativo;
+    }
+
+    public void setAtivo(AtivoDigital ativo) {
+        this.ativo = ativo;
+    }
+
     public int getId() {
         return id;
     }
@@ -34,11 +60,11 @@ public class Reserva {
         this.id = id;
     }
 
-    public LocalDate getDataReserva() {
+    public LocalDateTime getDataReserva() {
         return dataReserva;
     }
 
-    public void setDataReserva(LocalDate dataReserva) {
+    public void setDataReserva(LocalDateTime dataReserva) {
         this.dataReserva = dataReserva;
     }
 

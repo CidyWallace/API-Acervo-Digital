@@ -5,6 +5,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ufpb.project.acervodigital.DTOs.*;
 import ufpb.project.acervodigital.models.Emprestimo;
+import ufpb.project.acervodigital.models.Reserva;
 import ufpb.project.acervodigital.models.User;
 import ufpb.project.acervodigital.services.EmprestimoService;
 import ufpb.project.acervodigital.services.ReservaService;
@@ -39,9 +40,10 @@ public class UserController {
         return ResponseEntity.ok(emprestimos);
     }
 
-    @GetMapping
-    public ResponseEntity<List<ReservaDTO>> findReservas() {
-        return ResponseEntity.ok(List.of(new ReservaDTO()));
+    @GetMapping("/holds/{id}")
+    public ResponseEntity<List<ReservaResponseDTO>> findReservas(@PathVariable Long id) {
+        List<ReservaResponseDTO> reservas = reservaService.buscarPorUserId(id).stream().map(this::convertToReservaDTO).toList();
+        return ResponseEntity.ok(reservas);
     }
 
     @PostMapping
@@ -78,6 +80,10 @@ public class UserController {
 
     private EmprestimoResponseDTO convertToEmprestimoDTO(Emprestimo emprestimo) {
         return modelMapper.map(emprestimo, EmprestimoResponseDTO.class);
+    }
+
+    private ReservaResponseDTO convertToReservaDTO(Reserva reserva) {
+        return modelMapper.map(reserva, ReservaResponseDTO.class);
     }
 
 }
