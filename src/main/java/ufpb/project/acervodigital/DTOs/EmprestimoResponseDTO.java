@@ -1,33 +1,19 @@
-package ufpb.project.acervodigital.models;
+package ufpb.project.acervodigital.DTOs;
 
-import jakarta.persistence.*;
 import ufpb.project.acervodigital.models.enums.StatusEmprestimo;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
-@Entity
-public class Emprestimo {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "emprestimo_id")
+public class EmprestimoResponseDTO {
     private Long id;
-
-    @Column(name = "data_emprestimo")
+    private Long userId;
+    private String nomeUser;
+    private Long ativoId;
+    private String tituloAtivo;
     private LocalDate dataEmprestimo;
-
-    @Column(name = "data_devolução")
     private LocalDate dataDevolucao;
-
-    @Enumerated(EnumType.STRING)
     private StatusEmprestimo status;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
-    private User user;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "ativo_id")
-    private AtivoDigital ativo;
 
     public Long getId() {
         return id;
@@ -35,6 +21,38 @@ public class Emprestimo {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public Long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Long userId) {
+        this.userId = userId;
+    }
+
+    public String getNomeUser() {
+        return nomeUser;
+    }
+
+    public void setNomeUser(String nomeUser) {
+        this.nomeUser = nomeUser;
+    }
+
+    public Long getAtivoId() {
+        return ativoId;
+    }
+
+    public void setAtivoId(Long ativoId) {
+        this.ativoId = ativoId;
+    }
+
+    public String getTituloAtivo() {
+        return tituloAtivo;
+    }
+
+    public void setTituloAtivo(String tituloAtivo) {
+        this.tituloAtivo = tituloAtivo;
     }
 
     public LocalDate getDataEmprestimo() {
@@ -59,21 +77,5 @@ public class Emprestimo {
 
     public void setStatus(StatusEmprestimo status) {
         this.status = status;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
-
-    public AtivoDigital getAtivo() {
-        return ativo;
-    }
-
-    public void setAtivo(AtivoDigital ativo) {
-        this.ativo = ativo;
     }
 }

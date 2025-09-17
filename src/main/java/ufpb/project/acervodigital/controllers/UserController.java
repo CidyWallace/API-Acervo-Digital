@@ -4,8 +4,8 @@ import org.modelmapper.ModelMapper;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ufpb.project.acervodigital.DTOs.*;
+import ufpb.project.acervodigital.models.Emprestimo;
 import ufpb.project.acervodigital.models.User;
-import ufpb.project.acervodigital.models.enums.StatusUsuario;
 import ufpb.project.acervodigital.services.EmprestimoService;
 import ufpb.project.acervodigital.services.ReservaService;
 import ufpb.project.acervodigital.services.UsuarioService;
@@ -33,9 +33,10 @@ public class UserController {
         return ResponseEntity.ok(convertToDTO(user));
     }
 
-    @GetMapping("/loans")
-    public ResponseEntity<List<EmprestimoDTO>> findLoans() {
-        return ResponseEntity.ok(List.of(new EmprestimoDTO()));
+    @GetMapping("/loans/{id}")
+    public ResponseEntity<List<EmprestimoResponseDTO>> findLoans(@PathVariable Long id) {
+        List<EmprestimoResponseDTO> emprestimos = emprestimoService.buscarPorUsuario(id).stream().map(this::convertToEmprestimoDTO).toList();
+        return ResponseEntity.ok(emprestimos);
     }
 
     @GetMapping
@@ -75,8 +76,8 @@ public class UserController {
         return modelMapper.map(userDTO, User.class);
     }
 
-    private StatusUsuario convertToEnum(UserStatusRequestDTO status) {
-        return modelMapper.map(status, StatusUsuario.class);
+    private EmprestimoResponseDTO convertToEmprestimoDTO(Emprestimo emprestimo) {
+        return modelMapper.map(emprestimo, EmprestimoResponseDTO.class);
     }
 
 }
