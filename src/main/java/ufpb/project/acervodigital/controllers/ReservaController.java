@@ -1,5 +1,6 @@
 package ufpb.project.acervodigital.controllers;
 
+import jakarta.validation.Valid;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,7 +23,7 @@ public class ReservaController {
     }
 
     @PostMapping
-    public ResponseEntity<ReservaResponseDTO> createReserva(@RequestBody ReservaRequestDTO reservaDTO) {
+    public ResponseEntity<ReservaResponseDTO> createReserva(@Valid @RequestBody ReservaRequestDTO reservaDTO) {
         var reserva = reservaService.criaReserva(reservaDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(convertToDTO(reserva));
     }

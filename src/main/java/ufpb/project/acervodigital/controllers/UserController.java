@@ -1,5 +1,6 @@
 package ufpb.project.acervodigital.controllers;
 
+import jakarta.validation.Valid;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -47,13 +48,13 @@ public class UserController {
     }
 
     @PostMapping
-    public ResponseEntity<UserResponseDTO> criarUser(@RequestBody UserRequestDTO userDTO) {
+    public ResponseEntity<UserResponseDTO> criarUser(@Valid @RequestBody UserRequestDTO userDTO) {
         var user = usuarioService.criarUsuario(convertToEntity(userDTO));
         return ResponseEntity.ok(convertToDTO(user));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<UserResponseDTO> atualizarUser(@RequestBody UserRequestDTO userDTO, @PathVariable Long id) {
+    public ResponseEntity<UserResponseDTO> atualizarUser(@Valid @RequestBody UserRequestDTO userDTO, @PathVariable Long id) {
         var user = usuarioService.atualizarUser(id, convertToEntity(userDTO));
         return ResponseEntity.ok(convertToDTO(user));
     }

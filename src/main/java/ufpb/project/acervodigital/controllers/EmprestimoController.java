@@ -1,5 +1,6 @@
 package ufpb.project.acervodigital.controllers;
 
+import jakarta.validation.Valid;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,7 +25,7 @@ public class EmprestimoController {
     }
 
     @PostMapping
-    public ResponseEntity<EmprestimoResponseDTO> criarEmprestimo(@RequestBody EmprestimoRequestDTO emprestimoDTO){
+    public ResponseEntity<EmprestimoResponseDTO> criarEmprestimo(@Valid @RequestBody EmprestimoRequestDTO emprestimoDTO){
         var emprestimo = emprestimoService.criarEmprestimo(emprestimoDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(convertToDTO(emprestimo));
     }

@@ -50,8 +50,8 @@ public class AtivoDigital {
         return formato;
     }
 
-    public void setFormato(FormatoAtivo formato) {
-        this.formato = formato;
+    public void setFormato(String formato) {
+        this.formato = FormatoAtivo.valueOf(formato);
     }
 
     public String getAutor() {

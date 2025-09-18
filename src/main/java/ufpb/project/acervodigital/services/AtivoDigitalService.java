@@ -1,11 +1,10 @@
 package ufpb.project.acervodigital.services;
 
+import org.apache.commons.text.WordUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
-import org.apache.commons.text.WordUtils;
 import ufpb.project.acervodigital.exception.ItemNotFoundException;
 import ufpb.project.acervodigital.models.AtivoDigital;
 import ufpb.project.acervodigital.models.enums.FormatoAtivo;
@@ -39,7 +38,7 @@ public class AtivoDigitalService {
 
         ativo.setTitulo(UpAtivo.getTitulo());
         ativo.setAutor(UpAtivo.getAutor());
-        ativo.setFormato(UpAtivo.getFormato());
+        ativo.setFormato(UpAtivo.getFormato().toString());
         ativo.setTotalLicencas(UpAtivo.getTotalLicencas());
         ativo.setLicencasDisponiveis(UpAtivo.getLicencasDisponiveis());
         return ativoRepository.save(ativo);

@@ -1,5 +1,6 @@
 package ufpb.project.acervodigital.controllers;
 
+import jakarta.validation.Valid;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -41,13 +42,14 @@ public class AtivoDigitalController {
     }
 
     @PostMapping
-    public ResponseEntity<AtivoDigitalResponseDTO> create(@RequestBody AtivoDigitalRequestDTO ativoDigitalRequestDTO) {
+    public ResponseEntity<AtivoDigitalResponseDTO> create(@Valid @RequestBody AtivoDigitalRequestDTO ativoDigitalRequestDTO) {
+        
         var ativo = ativoService.save(convertToEntity(ativoDigitalRequestDTO));
         return ResponseEntity.ok(convertToDTO(ativo));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<AtivoDigitalResponseDTO> update(@RequestBody AtivoDigitalRequestDTO ativoDigitalRequestDTO, @PathVariable Long id) {
+    public ResponseEntity<AtivoDigitalResponseDTO> update(@Valid @RequestBody AtivoDigitalRequestDTO ativoDigitalRequestDTO, @PathVariable Long id) {
         var ativo = ativoService.update(id, convertToEntity(ativoDigitalRequestDTO));
         return ResponseEntity.ok(convertToDTO(ativo));
     }
