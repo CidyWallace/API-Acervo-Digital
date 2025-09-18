@@ -61,7 +61,6 @@ public class ReservaService {
         newReserva.setAtivo(ativo);
         newReserva.setDataReserva(LocalDateTime.now());
         newReserva.setStatus(StatusReserva.ATIVA);
-        newReserva.setPosicaoFila(reservaRepository.countByAtivoIdAndStatusAndDataReservaBefore(ativo.getId(), StatusReserva.ATIVA, LocalDateTime.now()) + 1);
         return reservaRepository.save(newReserva);
     }
 
@@ -88,5 +87,9 @@ public class ReservaService {
         }
 
         return reservaRepository.findByUserIdAndStatus(userId, StatusReserva.ATIVA);
+    }
+
+    public Long PosicaoReserva(Reserva reserva) {
+        return reservaRepository.countByAtivoIdAndStatusAndIdLessThan(reserva.getAtivo().getId(), StatusReserva.ATIVA, reserva.getId()) + 1;
     }
 }

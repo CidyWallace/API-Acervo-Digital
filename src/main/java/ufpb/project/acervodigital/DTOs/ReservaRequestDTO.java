@@ -1,11 +1,12 @@
 package ufpb.project.acervodigital.DTOs;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 public class ReservaRequestDTO {
-    @NotBlank(message = "É preciso informa um usuário para ser feito uma reserva")
+    @NotNull(message = "É preciso informa um usuário para ser feito uma reserva")
     private Long userId;
-    @NotBlank(message = "É preciso informa um ativo para ser feito uma reserva")
+    @NotNull(message = "É preciso informa um ativo para ser feito uma reserva")
     private Long ativoId;
 
     public Long getUserId() {

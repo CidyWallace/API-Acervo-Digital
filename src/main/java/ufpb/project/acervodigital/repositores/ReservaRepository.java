@@ -16,5 +16,5 @@ public interface ReservaRepository extends JpaRepository<Reserva, Long> {
 
     List<Reserva> findByUserIdAndStatus(Long userId, StatusReserva statusReserva);
 
-    Long countByAtivoIdAndStatusAndDataReservaBefore(Long id, StatusReserva statusReserva, LocalDateTime now);
+    Long countByAtivoIdAndStatusAndIdLessThan(Long id, StatusReserva statusReserva,  Long idReserva);
 }

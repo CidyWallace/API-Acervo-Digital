@@ -43,8 +43,15 @@ public class UserController {
 
     @GetMapping("/holds/{id}")
     public ResponseEntity<List<ReservaResponseDTO>> findReservas(@PathVariable Long id) {
-        List<ReservaResponseDTO> reservas = reservaService.buscarPorUserId(id).stream().map(this::convertToReservaDTO).toList();
-        return ResponseEntity.ok(reservas);
+        List<Reserva> reserva = reservaService.buscarPorUserId(id);
+        List<ReservaResponseDTO> reservasDTO = reserva.stream().map(r -> {
+            Long posisao = reservaService.PosicaoReserva(r);
+
+            ReservaResponseDTO responseDTO = convertToReservaDTO(r);
+            responseDTO.setPosicaoFila(posisao);
+            return responseDTO;
+        }).toList();
+        return ResponseEntity.ok(reservasDTO);
     }
 
     @PostMapping

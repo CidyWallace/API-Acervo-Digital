@@ -25,7 +25,9 @@ public class ReservaController {
     @PostMapping
     public ResponseEntity<ReservaResponseDTO> createReserva(@Valid @RequestBody ReservaRequestDTO reservaDTO) {
         var reserva = reservaService.criaReserva(reservaDTO);
-        return ResponseEntity.status(HttpStatus.CREATED).body(convertToDTO(reserva));
+        var responseDTO = convertToDTO(reserva);
+        responseDTO.setPosicaoFila(reservaService.PosicaoReserva(reserva));
+        return ResponseEntity.status(HttpStatus.CREATED).body(responseDTO);
     }
 
     @DeleteMapping("/{id}/user/{userId}")

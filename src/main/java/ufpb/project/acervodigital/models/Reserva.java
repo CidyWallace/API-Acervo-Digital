@@ -10,7 +10,7 @@ public class Reserva {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "reserva_id")
-    private int id;
+    private Long id;
 
     @Column(name = "data_reserva")
     private LocalDateTime dataReserva;
@@ -25,16 +25,6 @@ public class Reserva {
     @ManyToOne
     @JoinColumn(name = "ativo_id")
     private AtivoDigital ativo;
-
-    private Long posicaoFila;
-
-    public Long getPosicaoFila() {
-        return posicaoFila;
-    }
-
-    public void setPosicaoFila(Long posicaoFila) {
-        this.posicaoFila = posicaoFila;
-    }
 
     public User getUser() {
         return user;
@@ -52,11 +42,11 @@ public class Reserva {
         this.ativo = ativo;
     }
 
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
