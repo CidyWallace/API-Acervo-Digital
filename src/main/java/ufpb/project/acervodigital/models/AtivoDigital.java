@@ -51,7 +51,7 @@ public class AtivoDigital {
     }
 
     public void setFormato(String formato) {
-        this.formato = FormatoAtivo.valueOf(formato);
+        this.formato = FormatoAtivo.valueOf(formato.toUpperCase());
     }
 
     public String getAutor() {

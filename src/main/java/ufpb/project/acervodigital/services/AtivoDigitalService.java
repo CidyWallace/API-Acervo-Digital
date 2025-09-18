@@ -38,7 +38,7 @@ public class AtivoDigitalService {
 
         ativo.setTitulo(UpAtivo.getTitulo());
         ativo.setAutor(UpAtivo.getAutor());
-        ativo.setFormato(UpAtivo.getFormato().toString());
+        ativo.setFormato(UpAtivo.getFormato().toString().toUpperCase());
         ativo.setTotalLicencas(UpAtivo.getTotalLicencas());
         ativo.setLicencasDisponiveis(UpAtivo.getLicencasDisponiveis());
         return ativoRepository.save(ativo);

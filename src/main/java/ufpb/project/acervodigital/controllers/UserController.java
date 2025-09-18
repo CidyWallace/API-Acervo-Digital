@@ -61,7 +61,7 @@ public class UserController {
 
     @PatchMapping("/{id}")
     public ResponseEntity<UserResponseDTO> atualizaStatus(@PathVariable Long id, @RequestBody UserStatusRequestDTO status) {
-        var user = usuarioService.atualizarStatus(id, status.getStatus());
+        var user = usuarioService.atualizarStatus(id, status.getStatus().toUpperCase());
         return ResponseEntity.ok(convertToDTO(user));
     }
 

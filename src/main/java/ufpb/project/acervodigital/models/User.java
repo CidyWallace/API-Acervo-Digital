@@ -39,8 +39,8 @@ public class User {
         return status;
     }
 
-    public void setStatus(StatusUsuario status) {
-        this.status = status;
+    public void setStatus(String status) {
+        this.status = StatusUsuario.valueOf(status.toUpperCase());
     }
 
     public LocalDate getDataCriacao() {

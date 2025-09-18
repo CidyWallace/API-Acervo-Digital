@@ -1,8 +1,6 @@
 package ufpb.project.acervodigital.services;
 
 import org.springframework.stereotype.Service;
-import ufpb.project.acervodigital.DTOs.UserRequestDTO;
-import ufpb.project.acervodigital.DTOs.UserResponseDTO;
 import ufpb.project.acervodigital.exception.ItemNotFoundException;
 import ufpb.project.acervodigital.exception.UserExistsException;
 import ufpb.project.acervodigital.models.User;
@@ -24,7 +22,7 @@ public class UsuarioService {
         if(userRepository.existsByEmail(user.getEmail())){
             throw new UserExistsException("O Email informado já está cadastrado");
         }
-        user.setStatus(StatusUsuario.ATIVO);
+        user.setStatus(StatusUsuario.ATIVO.toString());
         user.setDataCriacao(LocalDate.now());
         userRepository.save(user);
         return user;
@@ -44,11 +42,11 @@ public class UsuarioService {
         userExistente.setId(user.getId());
         userExistente.setNome(user.getNome());
         userExistente.setEmail(user.getEmail());
-        userExistente.setStatus(user.getStatus());
+        userExistente.setStatus(user.getStatus().toString());
         return userRepository.save(userExistente);
     }
 
-    public User atualizarStatus(Long id, StatusUsuario statusUsuario) {
+    public User atualizarStatus(Long id, String statusUsuario) {
         var userExistente = userRepository.findById(id).orElseThrow(() -> new ItemNotFoundException("Usuário "+id+" não encontrado"));
         userExistente.setStatus(statusUsuario);
         return userRepository.save(userExistente);

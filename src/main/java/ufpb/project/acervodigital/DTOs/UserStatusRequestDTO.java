@@ -10,13 +10,13 @@ public class UserStatusRequestDTO {
             enumClass = StatusUsuario.class,
             message = "O status informado é inválido! status válidos:  ATIVO, SUSPENSO"
     )
-    private StatusUsuario status;
+    private String status;
 
-    public StatusUsuario getStatus() {
+    public String getStatus() {
         return status;
     }
 
-    public void setStatus(StatusUsuario status) {
+    public void setStatus(String status) {
         this.status = status;
     }
 }
