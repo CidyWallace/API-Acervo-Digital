@@ -1,11 +1,12 @@
 package ufpb.project.acervodigital.DTOs;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 public class EmprestimoRequestDTO {
-    @NotBlank(message = "É preciso informa um usuário para ser feito um empréstimo")
+    @NotNull(message = "É preciso informa um usuário para ser feito um empréstimo")
     private Long usuarioId;
-    @NotBlank(message = "É preciso informa um ativo para ser feito um empréstimo")
+    @NotNull(message = "É preciso informa um ativo para ser feito um empréstimo")
     private Long ativoId;
 
     public Long getUsuarioId() {

@@ -36,14 +36,9 @@ public class EmprestimoController {
         return ResponseEntity.status(HttpStatus.OK).body(convertToDTO(emprestimo));
     }
 
-    @GetMapping
-    public ResponseEntity<List<EmprestimoResponseDTO>> listarEmprestimos(@RequestParam(required = false) Long userId){
-        List<EmprestimoResponseDTO> emprestimos;
-        if(userId != null){
-            emprestimos = emprestimoService.buscarPorUsuario(userId).stream().map(this::convertToDTO).toList();
-        }else{
-            emprestimos = emprestimoService.listarEmprestimo().stream().map(this::convertToDTO).toList();
-        }
+    @GetMapping("/{id}")
+    public ResponseEntity<List<EmprestimoResponseDTO>> listarEmprestimos(@PathVariable Long id){
+        List<EmprestimoResponseDTO> emprestimos = emprestimoService.buscarPorUsuario(id).stream().map(this::convertToDTO).toList();
 
         return ResponseEntity.ok(emprestimos);
     }

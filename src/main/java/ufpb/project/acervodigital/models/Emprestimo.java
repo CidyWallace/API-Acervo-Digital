@@ -1,5 +1,6 @@
 package ufpb.project.acervodigital.models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import ufpb.project.acervodigital.models.enums.StatusEmprestimo;
 
@@ -23,10 +24,12 @@ public class Emprestimo {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
+    @JsonBackReference
     private User user;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "ativo_id")
+    @JsonBackReference
     private AtivoDigital ativo;
 
     public Long getId() {

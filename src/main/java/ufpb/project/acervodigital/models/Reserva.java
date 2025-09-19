@@ -1,5 +1,6 @@
 package ufpb.project.acervodigital.models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import ufpb.project.acervodigital.models.enums.StatusReserva;
 
@@ -20,10 +21,12 @@ public class Reserva {
 
     @ManyToOne
     @JoinColumn(name = "user_id")
+    @JsonBackReference
     private User user;
 
     @ManyToOne
     @JoinColumn(name = "ativo_id")
+    @JsonBackReference
     private AtivoDigital ativo;
 
     public User getUser() {

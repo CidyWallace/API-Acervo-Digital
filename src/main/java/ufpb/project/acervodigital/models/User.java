@@ -1,5 +1,6 @@
 package ufpb.project.acervodigital.models;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import ufpb.project.acervodigital.models.enums.StatusUsuario;
 
@@ -30,9 +31,11 @@ public class User {
     private StatusUsuario status;
 
     @OneToMany(mappedBy = "user")
+    @JsonManagedReference
     private Collection<Emprestimo> emprestimos;
 
     @OneToMany(mappedBy = "user")
+    @JsonManagedReference
     private Collection<Reserva> reservas;
 
     public StatusUsuario getStatus() {

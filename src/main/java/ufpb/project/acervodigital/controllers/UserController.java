@@ -54,28 +54,10 @@ public class UserController {
         return ResponseEntity.ok(reservasDTO);
     }
 
-    @PostMapping
-    public ResponseEntity<UserResponseDTO> criarUser(@Valid @RequestBody UserRequestDTO userDTO) {
-        var user = usuarioService.criarUsuario(convertToEntity(userDTO));
-        return ResponseEntity.ok(convertToDTO(user));
-    }
-
     @PutMapping("/{id}")
     public ResponseEntity<UserResponseDTO> atualizarUser(@Valid @RequestBody UserRequestDTO userDTO, @PathVariable Long id) {
         var user = usuarioService.atualizarUser(id, convertToEntity(userDTO));
         return ResponseEntity.ok(convertToDTO(user));
-    }
-
-    @PatchMapping("/{id}")
-    public ResponseEntity<UserResponseDTO> atualizaStatus(@PathVariable Long id, @RequestBody UserStatusRequestDTO status) {
-        var user = usuarioService.atualizarStatus(id, status.getStatus().toUpperCase());
-        return ResponseEntity.ok(convertToDTO(user));
-    }
-
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
-        usuarioService.deletaUser(id);
-        return ResponseEntity.noContent().build();
     }
 
     private UserResponseDTO convertToDTO(User user) {

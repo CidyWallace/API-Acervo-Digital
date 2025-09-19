@@ -1,5 +1,6 @@
 package ufpb.project.acervodigital.models;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import ufpb.project.acervodigital.models.enums.FormatoAtivo;
 
@@ -25,9 +26,11 @@ public class AtivoDigital {
     private Integer licencasDisponiveis;
 
     @OneToMany(mappedBy = "ativo")
+    @JsonManagedReference
     private Collection<Emprestimo> emprestimos;
 
     @OneToMany(mappedBy = "ativo")
+    @JsonManagedReference
     private Collection<Reserva> reservas;
 
     public Integer getLicencasDisponiveis() {

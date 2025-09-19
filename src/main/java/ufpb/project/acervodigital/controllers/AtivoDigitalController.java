@@ -1,12 +1,10 @@
 package ufpb.project.acervodigital.controllers;
 
-import jakarta.validation.Valid;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import ufpb.project.acervodigital.DTOs.AtivoDigitalRequestDTO;
 import ufpb.project.acervodigital.DTOs.AtivoDigitalResponseDTO;
 import ufpb.project.acervodigital.models.AtivoDigital;
 import ufpb.project.acervodigital.models.enums.FormatoAtivo;
@@ -41,30 +39,7 @@ public class AtivoDigitalController {
         return ResponseEntity.ok().body(convertToDTO(ativo));
     }
 
-    @PostMapping
-    public ResponseEntity<AtivoDigitalResponseDTO> create(@Valid @RequestBody AtivoDigitalRequestDTO ativoDigitalRequestDTO) {
-        
-        var ativo = ativoService.save(convertToEntity(ativoDigitalRequestDTO));
-        return ResponseEntity.ok(convertToDTO(ativo));
-    }
-
-    @PutMapping("/{id}")
-    public ResponseEntity<AtivoDigitalResponseDTO> update(@Valid @RequestBody AtivoDigitalRequestDTO ativoDigitalRequestDTO, @PathVariable Long id) {
-        var ativo = ativoService.update(id, convertToEntity(ativoDigitalRequestDTO));
-        return ResponseEntity.ok(convertToDTO(ativo));
-    }
-
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable Long id) {
-        ativoService.delete(id);
-        return ResponseEntity.noContent().build();
-    }
-
     private AtivoDigitalResponseDTO convertToDTO(AtivoDigital ativoDigital) {
         return modelMapper.map(ativoDigital, AtivoDigitalResponseDTO.class);
-    }
-
-    private AtivoDigital convertToEntity(AtivoDigitalRequestDTO ativoDigitalRequestDTO) {
-        return modelMapper.map(ativoDigitalRequestDTO, AtivoDigital.class);
     }
 }

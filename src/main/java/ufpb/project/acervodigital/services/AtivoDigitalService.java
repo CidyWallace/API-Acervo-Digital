@@ -44,6 +44,13 @@ public class AtivoDigitalService {
         return ativoRepository.save(ativo);
     }
 
+    public AtivoDigital updateLicencas(Long id, Integer newLicencas) {
+        var ativo = ativoRepository.findById(id).orElseThrow(() -> new ItemNotFoundException("Ativo digital "+id+" não encontrado"));
+
+        ativo.setTotalLicencas(newLicencas);
+        return ativoRepository.save(ativo);
+    }
+
     public void delete(Long id) {
         if(!ativoRepository.existsById(id)) {
             throw new ItemNotFoundException("Ativo digital "+id+" não encontrado");
