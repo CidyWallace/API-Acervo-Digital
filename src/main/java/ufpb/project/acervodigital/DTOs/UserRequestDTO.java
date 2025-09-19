@@ -1,9 +1,9 @@
 package ufpb.project.acervodigital.DTOs;
 
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.*;
+import ufpb.project.acervodigital.models.enums.FormatoAtivo;
+import ufpb.project.acervodigital.models.enums.Role;
+import ufpb.project.acervodigital.validation.EnumValue;
 
 public class UserRequestDTO {
     @NotBlank(message = "O nome não pode estar em branco")
@@ -17,6 +17,20 @@ public class UserRequestDTO {
     @NotBlank(message = "O número do cartão da biblioteca não pode estar em branco")
     @Min(value = 6, message = "O número do cartão da biblioteca precisa de no mínimo 6 dígitos")
     private String numeroCartao;
+    @NotNull(message = "A role não pode ficar em branco")
+    @EnumValue(
+            enumClass = Role.class,
+            message = "A role informado é inválido! Formatos válidos: USER, ADMIN"
+    )
+    private String role;
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
+    }
 
     public String getNome() {
         return nome;

@@ -3,6 +3,7 @@ package ufpb.project.acervodigital.controllers;
 import jakarta.validation.Valid;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import ufpb.project.acervodigital.DTOs.*;
@@ -32,6 +33,7 @@ public class AdminController {
     }
 
     @PostMapping("/assets")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<AtivoDigitalResponseDTO> create(@Valid @RequestBody AtivoDigitalRequestDTO ativoDigitalRequestDTO) {
         var ativo = ativoDigitalService.save(convertToAtivoEntity(ativoDigitalRequestDTO));
         URI location = ServletUriComponentsBuilder.fromCurrentRequest()
@@ -40,24 +42,28 @@ public class AdminController {
     }
 
     @PutMapping("/assets/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<AtivoDigitalResponseDTO> update(@Valid @RequestBody AtivoDigitalRequestDTO ativoDigitalRequestDTO, @PathVariable Long id) {
         var ativo = ativoDigitalService.update(id, convertToAtivoEntity(ativoDigitalRequestDTO));
         return ResponseEntity.ok(convertToAtivoDTO(ativo));
     }
 
     @PatchMapping("/assets/{id}/licenses")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<AtivoDigitalResponseDTO> updateLicences(@Valid @RequestBody AtivoUpdateLicencesDTO ativoUpdateLicencesDTO, @PathVariable Long id) {
         var ativo = ativoDigitalService.updateLicencas(id, ativoUpdateLicencesDTO.getLicence());
         return ResponseEntity.ok(convertToAtivoDTO(ativo));
     }
 
     @DeleteMapping("/assets/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         ativoDigitalService.delete(id);
         return ResponseEntity.noContent().build();
     }
 
     @PostMapping("/users")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<UserResponseDTO> criarUser(@Valid @RequestBody UserRequestDTO userDTO) {
         var user = usuarioService.criarUsuario(convertToUserEntity(userDTO));
         URI location = ServletUriComponentsBuilder.fromCurrentRequest()
@@ -66,29 +72,34 @@ public class AdminController {
     }
 
     @GetMapping("/users/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<UserResponseDTO> findUser(@PathVariable Long id) {
         var user = usuarioService.findById(id);
         return ResponseEntity.ok(convertToUserDTO(user));
     }
 
     @GetMapping("/users")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<List<UserResponseDTO>> listAllUsers() {
         return ResponseEntity.ok(usuarioService.listarUsuarios().stream().map(this::convertToUserDTO).toList());
     }
 
     @PatchMapping("/users/{id}/status")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<UserResponseDTO> atualizaStatus(@PathVariable Long id, @RequestBody UserStatusRequestDTO status) {
         var user = usuarioService.atualizarStatus(id, status.getStatus().toUpperCase());
         return ResponseEntity.ok(convertToUserDTO(user));
     }
 
     @DeleteMapping("/users/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
         usuarioService.deletaUser(id);
         return ResponseEntity.noContent().build();
     }
 
     @GetMapping("/loans")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<List<EmprestimoResponseDTO>> listarEmprestimos(@RequestParam(required = false) Long userId){
         List<EmprestimoResponseDTO> emprestimos;
         if(userId != null){

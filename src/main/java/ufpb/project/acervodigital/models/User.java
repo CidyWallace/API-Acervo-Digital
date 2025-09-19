@@ -2,14 +2,19 @@ package ufpb.project.acervodigital.models;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+import ufpb.project.acervodigital.models.enums.Role;
 import ufpb.project.acervodigital.models.enums.StatusUsuario;
 
 import java.time.LocalDate;
 import java.util.Collection;
+import java.util.List;
 
 @Entity
 @Table(name = "USUARIOS")
-public class User {
+public class User implements UserDetails {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_id")
     private Long id;
@@ -22,7 +27,12 @@ public class User {
     @Column(unique = true)
     private String email;
 
+    @Column(nullable = false)
     private String senha;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private Role role;
 
     @Column(name = "data_criacao")
     private LocalDate dataCriacao;
@@ -44,6 +54,18 @@ public class User {
 
     public void setStatus(String status) {
         this.status = StatusUsuario.valueOf(status.toUpperCase());
+    }
+
+    public Role getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = Role.valueOf(role.toUpperCase());
+    }
+
+    public void setStatus(StatusUsuario status) {
+        this.status = status;
     }
 
     public LocalDate getDataCriacao() {
@@ -92,5 +114,20 @@ public class User {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return List.of(new SimpleGrantedAuthority("ROLE_"+role.name()));
+    }
+
+    @Override
+    public String getPassword() {
+        return this.senha;
+    }
+
+    @Override
+    public String getUsername() {
+        return this.email;
     }
 }

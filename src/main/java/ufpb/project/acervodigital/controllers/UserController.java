@@ -3,6 +3,8 @@ package ufpb.project.acervodigital.controllers;
 import jakarta.validation.Valid;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import ufpb.project.acervodigital.DTOs.*;
 import ufpb.project.acervodigital.models.Emprestimo;
@@ -29,21 +31,26 @@ public class UserController {
         this.reservaService = reservaService;
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<UserResponseDTO> findUser(@PathVariable Long id) {
-        var user = usuarioService.findById(id);
-        return ResponseEntity.ok(convertToDTO(user));
+    @GetMapping
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
+    public ResponseEntity<UserResponseDTO> findUser(Authentication authentication) {
+        var user = (User) authentication.getPrincipal();
+        return ResponseEntity.ok(convertToDTO(usuarioService.findById(user.getId())));
     }
 
-    @GetMapping("/loans/{id}")
-    public ResponseEntity<List<EmprestimoResponseDTO>> findLoans(@PathVariable Long id) {
-        List<EmprestimoResponseDTO> emprestimos = emprestimoService.buscarPorUsuario(id).stream().map(this::convertToEmprestimoDTO).toList();
+    @GetMapping("/loans")
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
+    public ResponseEntity<List<EmprestimoResponseDTO>> findLoans(Authentication authentication) {
+        var user = (User) authentication.getPrincipal();
+        List<EmprestimoResponseDTO> emprestimos = emprestimoService.buscarPorUsuario(user.getId()).stream().map(this::convertToEmprestimoDTO).toList();
         return ResponseEntity.ok(emprestimos);
     }
 
-    @GetMapping("/holds/{id}")
-    public ResponseEntity<List<ReservaResponseDTO>> findReservas(@PathVariable Long id) {
-        List<Reserva> reserva = reservaService.buscarPorUserId(id);
+    @GetMapping("/holds")
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
+    public ResponseEntity<List<ReservaResponseDTO>> findReservas(Authentication authentication) {
+        var user = (User) authentication.getPrincipal();
+        List<Reserva> reserva = reservaService.buscarPorUserId(user.getId());
         List<ReservaResponseDTO> reservasDTO = reserva.stream().map(r -> {
             Long posisao = reservaService.PosicaoReserva(r);
 
@@ -54,10 +61,11 @@ public class UserController {
         return ResponseEntity.ok(reservasDTO);
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<UserResponseDTO> atualizarUser(@Valid @RequestBody UserRequestDTO userDTO, @PathVariable Long id) {
-        var user = usuarioService.atualizarUser(id, convertToEntity(userDTO));
-        return ResponseEntity.ok(convertToDTO(user));
+    @PutMapping
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
+    public ResponseEntity<UserResponseDTO> atualizarUser(@Valid @RequestBody UserRequestDTO userDTO, Authentication authentication) {
+        var user = (User) authentication.getPrincipal();
+        return ResponseEntity.ok(convertToDTO(usuarioService.atualizarUser(user.getId(), convertToEntity(userDTO))));
     }
 
     private UserResponseDTO convertToDTO(User user) {

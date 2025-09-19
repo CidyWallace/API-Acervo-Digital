@@ -6,7 +6,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class ErroResponse {
+public class ErrorResponse {
 
     private final LocalDateTime timestamp;
     private final int status;
@@ -15,7 +15,7 @@ public class ErroResponse {
     private final String path;
     private List<ValidationErrorDetail> errors;
 
-    public ErroResponse(int status, String error, String mensagem, String path) {
+    public ErrorResponse(int status, String error, String mensagem, String path) {
         this.timestamp = LocalDateTime.now();
         this.status = status;
         this.error = error;
@@ -23,7 +23,7 @@ public class ErroResponse {
         this.path = path;
     }
 
-    public ErroResponse(int status, String error, String message, String path, List<ValidationErrorDetail> errors) {
+    public ErrorResponse(int status, String error, String message, String path, List<ValidationErrorDetail> errors) {
         this.timestamp = LocalDateTime.now();
         this.status = status;
         this.error = error;

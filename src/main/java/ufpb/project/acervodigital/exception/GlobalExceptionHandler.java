@@ -4,8 +4,6 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
-import org.springframework.http.converter.HttpMessageNotReadableException;
-import org.springframework.web.ErrorResponse;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -21,7 +19,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(ItemNotFoundException.class)
     public ResponseEntity<Object> handleItemNotFoundException(ItemNotFoundException ex, WebRequest request) {
         HttpStatus status = HttpStatus.NOT_FOUND;
-        ErroResponse body = new ErroResponse(
+        ErrorResponse body = new ErrorResponse(
                 status.value(),
                 status.getReasonPhrase(),
                 ex.getMessage(),
@@ -33,7 +31,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(UserExistsException.class)
     public ResponseEntity<Object> handleUserExistsException(UserExistsException ex, WebRequest request) {
         HttpStatus status = HttpStatus.BAD_REQUEST;
-        ErroResponse body = new ErroResponse(
+        ErrorResponse body = new ErrorResponse(
                 status.value(),
                 status.getReasonPhrase(),
                 ex.getMessage(),
@@ -45,7 +43,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(BusinessRuleException.class)
     public ResponseEntity<Object> handleRegraDeNegocio(BusinessRuleException ex, WebRequest request) {
         HttpStatus status = HttpStatus.BAD_REQUEST;
-        ErroResponse body = new ErroResponse(
+        ErrorResponse body = new ErrorResponse(
                 status.value(),
                 status.getReasonPhrase(),
                 ex.getMessage(),
@@ -58,11 +56,11 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatusCode statusCode, WebRequest request) {
         HttpStatus status = HttpStatus.BAD_REQUEST;
 
-        List<ErroResponse.ValidationErrorDetail> validationErrors = ex.getBindingResult().getFieldErrors().stream()
-                .map(fieldError -> new ErroResponse.ValidationErrorDetail(fieldError.getField(), fieldError.getDefaultMessage()))
+        List<ErrorResponse.ValidationErrorDetail> validationErrors = ex.getBindingResult().getFieldErrors().stream()
+                .map(fieldError -> new ErrorResponse.ValidationErrorDetail(fieldError.getField(), fieldError.getDefaultMessage()))
                 .collect(Collectors.toList());
 
-        ErroResponse body = new ErroResponse(
+        ErrorResponse body = new ErrorResponse(
                 status.value(),
                 status.getReasonPhrase(),
                 "Erro de validação. Verifique os campos informados.",
@@ -76,7 +74,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(Exception.class)
     public ResponseEntity<Object> handlerGenericException(Exception ex, WebRequest request) {
         HttpStatus status = HttpStatus.INTERNAL_SERVER_ERROR;
-        ErroResponse body = new ErroResponse(
+        ErrorResponse body = new ErrorResponse(
                 status.value(),
                 status.getReasonPhrase(),
                 "Ocorreu um erro inesperado no servidor. Tente novamente mais tarde.",

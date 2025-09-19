@@ -4,11 +4,14 @@ import jakarta.validation.Valid;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import ufpb.project.acervodigital.DTOs.ReservaRequestDTO;
 import ufpb.project.acervodigital.DTOs.ReservaResponseDTO;
 import ufpb.project.acervodigital.models.Reserva;
+import ufpb.project.acervodigital.models.User;
 import ufpb.project.acervodigital.services.ReservaService;
 
 import java.net.URI;
@@ -26,6 +29,7 @@ public class ReservaController {
     }
 
     @PostMapping
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     public ResponseEntity<ReservaResponseDTO> createReserva(@Valid @RequestBody ReservaRequestDTO reservaDTO) {
         var reserva = reservaService.criaReserva(reservaDTO);
         var responseDTO = convertToDTO(reserva);
@@ -35,9 +39,11 @@ public class ReservaController {
         return ResponseEntity.created(location).body(responseDTO);
     }
 
-    @DeleteMapping("/{id}/user/{userId}")
-    public ResponseEntity<Void> cancelarReserva(@PathVariable Long id, @PathVariable Long userId) {
-        reservaService.cancelaReserva(id, userId);
+    @DeleteMapping("/{id}")
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
+    public ResponseEntity<Void> cancelarReserva(@PathVariable Long id, Authentication authentication) {
+        var user = (User) authentication.getPrincipal();
+        reservaService.cancelaReserva(id, user.getId());
         return ResponseEntity.noContent().build();
     }
 

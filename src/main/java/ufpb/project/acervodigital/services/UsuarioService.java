@@ -1,9 +1,11 @@
 package ufpb.project.acervodigital.services;
 
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import ufpb.project.acervodigital.exception.ItemNotFoundException;
 import ufpb.project.acervodigital.exception.UserExistsException;
 import ufpb.project.acervodigital.models.User;
+import ufpb.project.acervodigital.models.enums.Role;
 import ufpb.project.acervodigital.models.enums.StatusUsuario;
 import ufpb.project.acervodigital.repositores.UserRepository;
 
@@ -13,9 +15,11 @@ import java.util.List;
 @Service
 public class UsuarioService {
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
-    public UsuarioService(UserRepository userRepository) {
+    public UsuarioService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     public User criarUsuario(User user) {
@@ -24,6 +28,7 @@ public class UsuarioService {
         }
         user.setStatus(StatusUsuario.ATIVO.toString());
         user.setDataCriacao(LocalDate.now());
+        user.setSenha(passwordEncoder.encode(user.getSenha()));
         userRepository.save(user);
         return user;
     }
