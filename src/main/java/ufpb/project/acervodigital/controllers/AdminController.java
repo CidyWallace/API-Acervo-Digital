@@ -35,7 +35,7 @@ public class AdminController {
     public ResponseEntity<AtivoDigitalResponseDTO> create(@Valid @RequestBody AtivoDigitalRequestDTO ativoDigitalRequestDTO) {
         var ativo = ativoDigitalService.save(convertToAtivoEntity(ativoDigitalRequestDTO));
         URI location = ServletUriComponentsBuilder.fromCurrentRequest()
-                .path("/assets/{id}").buildAndExpand(ativo.getId()).toUri();
+                .path("/{id}").buildAndExpand(ativo.getId()).toUri();
         return ResponseEntity.created(location).body(convertToAtivoDTO(ativo));
     }
 
@@ -61,7 +61,7 @@ public class AdminController {
     public ResponseEntity<UserResponseDTO> criarUser(@Valid @RequestBody UserRequestDTO userDTO) {
         var user = usuarioService.criarUsuario(convertToUserEntity(userDTO));
         URI location = ServletUriComponentsBuilder.fromCurrentRequest()
-                .path("/users/{id}").buildAndExpand(user.getId()).toUri();
+                .path("/{id}").buildAndExpand(user.getId()).toUri();
         return ResponseEntity.created(location).body(convertToUserDTO(user));
     }
 
