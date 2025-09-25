@@ -22,7 +22,7 @@ cd acervodigital
 
 **2. Configure as Variáveis de Ambiente**
 
-Este projeto utiliza um arquivo `application.properties` para gerenciar variáveis sensíveis, como credenciais de banco de dados e segredos de token.
+Este projeto utiliza o arquivo `application.properties` para gerenciar variáveis sensíveis, como credenciais de banco de dados e segredos de token.
 
 - Adicione as seguintes variáveis ao arquivo, substituindo os valores de exemplo pelos seus:
 
@@ -43,11 +43,11 @@ security.jwt.expiration-time=900000
 Aqui estão alguns dos endpoints disponíveis na API:
 
 - **Autenticação:**
-    - `POST /auth/login`: Realiza o login e retorna um token JWT.
+    - `POST /api/auth/login`: Realiza o login e retorna um token JWT.
 - **Usuários:**
-    - `POST /users`: Registra um novo usuário.
+    - `POST /api/admin/users`: Registra um novo usuário. (requer autenticação)
 - **Itens do Acervo:**
-    - `GET /items`: Lista todos os itens do acervo (requer autenticação).
-    - `POST /items`: Adiciona um novo item ao acervo (requer autenticação).
+    - `GET /api/assets`: Lista todos os itens do acervo
+    - `POST /api/admin/assets`: Adiciona um novo item ao acervo (requer autenticação).
 - **Documentação:**
   - `http://localhost:8080/swagger-ui/index.html#/`
