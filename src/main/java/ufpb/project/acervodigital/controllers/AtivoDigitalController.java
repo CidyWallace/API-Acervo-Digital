@@ -1,10 +1,14 @@
 package ufpb.project.acervodigital.controllers;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import ufpb.project.acervodigital.DTOs.AtivoDigitalResponseDTO;
 import ufpb.project.acervodigital.models.AtivoDigital;
@@ -23,6 +27,14 @@ public class AtivoDigitalController {
     }
 
     @GetMapping
+    @Operation(summary = "Retorna todos os ativos digitais", description = "Retorna uma lista com todos os ativos digitais, ou filtrados por título, autor ou formato")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Ativos retornados com sucesso", content = {
+                    @Content(
+                            schema = @Schema(implementation = AtivoDigitalResponseDTO.class)
+                    )
+            })
+    })
     public ResponseEntity<Page<AtivoDigitalResponseDTO>> findAll(
             @RequestParam(required = false) String titulo,
             @RequestParam(required = false) String autor,
@@ -35,6 +47,15 @@ public class AtivoDigitalController {
     }
 
     @GetMapping("/{id}")
+    @Operation(summary = "Retorna um ativo digital", description = "Retorna um ativo digital especificado pelo id")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Ativo digital encontrado com sucesso", content = {
+                    @Content(
+                            schema = @Schema(implementation = AtivoDigitalResponseDTO.class)
+                    )
+            }),
+            @ApiResponse(responseCode = "404", description = "Não foi encontrado o ativo digital")
+    })
     public ResponseEntity<AtivoDigitalResponseDTO> findById(@PathVariable Long id) {
         var ativo = ativoService.findById(id);
         return ResponseEntity.ok().body(convertToDTO(ativo));

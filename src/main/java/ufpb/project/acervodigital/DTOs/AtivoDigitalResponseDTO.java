@@ -1,13 +1,20 @@
 package ufpb.project.acervodigital.DTOs;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import ufpb.project.acervodigital.models.enums.FormatoAtivo;
 
 public class AtivoDigitalResponseDTO {
+    @Schema(description = "Id do ativo digital")
     private Long id;
+    @Schema(description = "Titulo do ativo digital")
     private String titulo;
+    @Schema(description = "Autor do ativo digital")
     private String autor;
+    @Schema(description = "Formato do ativo digital")
     private FormatoAtivo formato;
+    @Schema(description = "Total de licenças do ativo digital")
     private Integer totalLicencas;
+    @Schema(description = "Total de licenças disponíveis para empréstimos do ativo digital")
     private Integer licencasDisponiveis;
 
     public String getTitulo() {

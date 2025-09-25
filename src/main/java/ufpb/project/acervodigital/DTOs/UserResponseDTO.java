@@ -1,15 +1,22 @@
 package ufpb.project.acervodigital.DTOs;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import ufpb.project.acervodigital.models.enums.StatusUsuario;
 
 import java.time.LocalDate;
 
 public class UserResponseDTO {
+    @Schema(description = "Id do usuário")
     private Long id;
+    @Schema(description = "Nome do usuário")
     private String nome;
+    @Schema(description = "Numéro do cartão da biblioteca do usuário")
     private String numeroCartao;
+    @Schema(description = "Email do usuário")
     private String email;
+    @Schema(description = "Data de criação da conta do usuário")
     private LocalDate dataCriacao;
+    @Schema(description = "Status do usuário (ATIVA, SUSPENSA)")
     private StatusUsuario status;
 
     public Long getId() {

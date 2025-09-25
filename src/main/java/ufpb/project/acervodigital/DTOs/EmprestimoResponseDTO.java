@@ -1,18 +1,27 @@
 package ufpb.project.acervodigital.DTOs;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import ufpb.project.acervodigital.models.enums.StatusEmprestimo;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 public class EmprestimoResponseDTO {
+    @Schema(description = "Id do empréstimo")
     private Long id;
+    @Schema(description = "Id do usuário")
     private Long userId;
+    @Schema(description = "Nome do usuário")
     private String nomeUser;
+    @Schema(description = "Id do ativo digital")
     private Long ativoId;
+    @Schema(description = "Titulo do ativo digital")
     private String tituloAtivo;
+    @Schema(description = "Data em que ocorreu o empréstimo")
     private LocalDate dataEmprestimo;
+    @Schema(description = "Data de expiração do empréstimo")
     private LocalDate dataDevolucao;
+    @Schema(description = "Status do empréstimo (ATIVO, DEVOLVIDO, EXPIRADO)")
     private StatusEmprestimo status;
 
     public Long getId() {

@@ -2,11 +2,11 @@ package ufpb.project.acervodigital.services;
 
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
-import ufpb.project.acervodigital.DTOs.EmprestimoRequestDTO;
 import ufpb.project.acervodigital.exception.BusinessRuleException;
 import ufpb.project.acervodigital.exception.ItemNotFoundException;
 import ufpb.project.acervodigital.models.AtivoDigital;
 import ufpb.project.acervodigital.models.Emprestimo;
+import ufpb.project.acervodigital.models.User;
 import ufpb.project.acervodigital.models.enums.StatusEmprestimo;
 import ufpb.project.acervodigital.models.enums.StatusUsuario;
 import ufpb.project.acervodigital.repositores.AtivoDigitalRepository;
@@ -32,11 +32,9 @@ public class EmprestimoService {
     }
 
     @Transactional
-    public Emprestimo criarEmprestimo(EmprestimoRequestDTO emprestimo) {
-        var user = userRepository.findById(emprestimo.getUsuarioId())
-                .orElseThrow(() -> new ItemNotFoundException("Usuario "+emprestimo.getUsuarioId()+" não encontrado"));
-        var ativo = ativoDigitalRepository.findById(emprestimo.getAtivoId())
-                .orElseThrow(() -> new ItemNotFoundException("Ativo "+emprestimo.getAtivoId()+" não encontrado"));
+    public Emprestimo criarEmprestimo(Long id_ativo, User user) {
+        var ativo = ativoDigitalRepository.findById(id_ativo)
+                .orElseThrow(() -> new ItemNotFoundException("Ativo "+id_ativo+" não encontrado"));
 
         if (user.getStatus() == StatusUsuario.SUSPENSO){
             throw new BusinessRuleException("Usuário suspensos não podem realizar emprestimos");
@@ -67,7 +65,7 @@ public class EmprestimoService {
                 .orElseThrow(() -> new ItemNotFoundException("Emprestimo "+idEmprestimo+" não encontrado"));
 
         if(emprestimo.getStatus() != StatusEmprestimo.ATIVO) {
-            throw new BusinessRuleException("Este emprestimo não está mais ativo e não pode ser mais devolvido");
+            throw new BusinessRuleException("Este empréstimo não está mais ativo e não pode ser mais devolvido");
         }
 
         emprestimo.setStatus(StatusEmprestimo.DEVOLVIDO);

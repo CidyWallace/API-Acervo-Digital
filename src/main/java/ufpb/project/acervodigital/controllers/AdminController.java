@@ -1,5 +1,12 @@
 package ufpb.project.acervodigital.controllers;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.ResponseEntity;
@@ -19,6 +26,8 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/admin")
+@Tag(name = "Admin - Gerencia usuarios e ativos", description = "Endpoints para administradores gerenciarem os usuários e ativos do sistema.")
+@SecurityRequirement(name = "bearerAuth")
 public class AdminController {
     private final UsuarioService usuarioService;
     private final AtivoDigitalService ativoDigitalService;
@@ -34,6 +43,19 @@ public class AdminController {
 
     @PostMapping("/assets")
     @PreAuthorize("hasRole('ADMIN')")
+    @Operation(summary = "Cria um novo ativo digital", description = "Cria um novo ativo digital e retorna as informações")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "Ativo digital criado com sucesso", content = {
+                    @Content(
+                            schema = @Schema(implementation = AtivoDigitalResponseDTO.class)
+                    )
+            }),
+            @ApiResponse(responseCode = "500", description = "Foram enviados dados inválidos", content = {
+                    @Content(
+                            schema = @Schema(implementation = AtivoDigitalRequestDTO.class)
+                    )
+            })
+    })
     public ResponseEntity<AtivoDigitalResponseDTO> create(@Valid @RequestBody AtivoDigitalRequestDTO ativoDigitalRequestDTO) {
         var ativo = ativoDigitalService.save(convertToAtivoEntity(ativoDigitalRequestDTO));
         URI location = ServletUriComponentsBuilder.fromCurrentRequest()
@@ -43,6 +65,21 @@ public class AdminController {
 
     @PutMapping("/assets/{id}")
     @PreAuthorize("hasRole('ADMIN')")
+    @Operation(summary = "Atualiza os dados de um ativo digital", description = "Atualiza os dados de um ativo digital informado pelo id")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Ativo digital atualizado com sucesso",
+                    content = {
+                            @Content(
+                                    schema = @Schema(implementation = AtivoDigitalResponseDTO.class)
+                            )
+                    }),
+            @ApiResponse(responseCode = "404", description = "Ativo digital não encontrado"),
+            @ApiResponse(responseCode = "500", description = "Foram enviados dados inválidos", content = {
+                    @Content(
+                            schema = @Schema(implementation = AtivoDigitalRequestDTO.class)
+                    )
+            }),
+    })
     public ResponseEntity<AtivoDigitalResponseDTO> update(@Valid @RequestBody AtivoDigitalRequestDTO ativoDigitalRequestDTO, @PathVariable Long id) {
         var ativo = ativoDigitalService.update(id, convertToAtivoEntity(ativoDigitalRequestDTO));
         return ResponseEntity.ok(convertToAtivoDTO(ativo));
@@ -50,6 +87,20 @@ public class AdminController {
 
     @PatchMapping("/assets/{id}/licenses")
     @PreAuthorize("hasRole('ADMIN')")
+    @Operation(summary = "Atualiza o número de licenças de um ativo digital", description = "Atualiza o número de um ativo digital informado pelo id")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Ativo digital criado com sucesso", content = {
+                    @Content(
+                            schema = @Schema(implementation = AtivoDigitalResponseDTO.class)
+                    )
+            }),
+            @ApiResponse(responseCode = "404", description = "Ativo digital não encontrado"),
+            @ApiResponse(responseCode = "500", description = "Foram enviados dados inválidos", content = {
+                    @Content(
+                            schema = @Schema(implementation = AtivoUpdateLicencesDTO.class)
+                    )
+            }),
+    })
     public ResponseEntity<AtivoDigitalResponseDTO> updateLicences(@Valid @RequestBody AtivoUpdateLicencesDTO ativoUpdateLicencesDTO, @PathVariable Long id) {
         var ativo = ativoDigitalService.updateLicencas(id, ativoUpdateLicencesDTO.getLicence());
         return ResponseEntity.ok(convertToAtivoDTO(ativo));
@@ -57,6 +108,11 @@ public class AdminController {
 
     @DeleteMapping("/assets/{id}")
     @PreAuthorize("hasRole('ADMIN')")
+    @Operation(summary = "Deleta um ativo digital", description = "Deleta o ativo digital informado pelo id")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Ativo digital deletado com sucesso"),
+            @ApiResponse(responseCode = "404", description = "Ativo digital não encontrado")
+    })
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         ativoDigitalService.delete(id);
         return ResponseEntity.noContent().build();
@@ -64,6 +120,19 @@ public class AdminController {
 
     @PostMapping("/users")
     @PreAuthorize("hasRole('ADMIN')")
+    @Operation(summary = "Cria um novo usuário", description = "Cria um novo usuário e retorna as informações")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "Usuário criado com sucesso", content = {
+                    @Content(
+                            schema = @Schema(implementation = UserResponseDTO.class)
+                    )
+            }),
+            @ApiResponse(responseCode = "500", description = "Foram enviados dados inválidos", content = {
+                    @Content(
+                            schema = @Schema(implementation = UserRequestDTO.class)
+                    )
+            }),
+    })
     public ResponseEntity<UserResponseDTO> criarUser(@Valid @RequestBody UserRequestDTO userDTO) {
         var user = usuarioService.criarUsuario(convertToUserEntity(userDTO));
         URI location = ServletUriComponentsBuilder.fromCurrentRequest()
@@ -73,6 +142,10 @@ public class AdminController {
 
     @GetMapping("/users/{id}")
     @PreAuthorize("hasRole('ADMIN')")
+    @Operation(summary = "retorna um usuário", description = "Retorna os dados de um usuário especificado pelo id")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "404", description = "Usuário não encontrado")
+    })
     public ResponseEntity<UserResponseDTO> findUser(@PathVariable Long id) {
         var user = usuarioService.findById(id);
         return ResponseEntity.ok(convertToUserDTO(user));
@@ -80,12 +153,29 @@ public class AdminController {
 
     @GetMapping("/users")
     @PreAuthorize("hasRole('ADMIN')")
+    @Operation(summary = "Retorna todos os usuários", description = "Retorna uma lista com todos os usuários")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Lista retornada com sucesso", content = {
+                    @Content(
+                            schema = @Schema(implementation = UserResponseDTO.class)
+                    )
+            }),
+    })
     public ResponseEntity<List<UserResponseDTO>> listAllUsers() {
         return ResponseEntity.ok(usuarioService.listarUsuarios().stream().map(this::convertToUserDTO).toList());
     }
 
     @PatchMapping("/users/{id}/status")
     @PreAuthorize("hasRole('ADMIN')")
+    @Operation(summary = "Atualiza o status de um usuário", description = "Atualiza o status do usuário especificado pelo id")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "404", description = "Usuário não encontrado"),
+            @ApiResponse(responseCode = "500", description = "Foram enviados dados inválidos", content = {
+                    @Content(
+                            schema = @Schema(implementation = UserStatusRequestDTO.class)
+                    )
+            }),
+    })
     public ResponseEntity<UserResponseDTO> atualizaStatus(@PathVariable Long id, @RequestBody UserStatusRequestDTO status) {
         var user = usuarioService.atualizarStatus(id, status.getStatus().toUpperCase());
         return ResponseEntity.ok(convertToUserDTO(user));
@@ -93,6 +183,10 @@ public class AdminController {
 
     @DeleteMapping("/users/{id}")
     @PreAuthorize("hasRole('ADMIN')")
+    @Operation(summary = "Deleta um usuário", description = "Deleta um usuário especificado pelo id")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "404", description = "Usuário não encontrado")
+    })
     public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
         usuarioService.deletaUser(id);
         return ResponseEntity.noContent().build();
@@ -100,6 +194,15 @@ public class AdminController {
 
     @GetMapping("/loans")
     @PreAuthorize("hasRole('ADMIN')")
+    @Operation(summary = "Retorna todos os empréstimos", description = "Retorna os empréstimos de todos os usuários ou de um usuário especificado")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Lista retornada cam sucesso", content = {
+                    @Content(
+                            schema = @Schema(implementation = EmprestimoResponseDTO.class)
+                    )
+            }),
+            @ApiResponse(responseCode = "404", description = "Usuário não encontrado"),
+    })
     public ResponseEntity<List<EmprestimoResponseDTO>> listarEmprestimos(@RequestParam(required = false) Long userId){
         List<EmprestimoResponseDTO> emprestimos;
         if(userId != null){

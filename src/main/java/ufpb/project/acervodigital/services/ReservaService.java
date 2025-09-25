@@ -2,10 +2,10 @@ package ufpb.project.acervodigital.services;
 
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
-import ufpb.project.acervodigital.DTOs.ReservaRequestDTO;
 import ufpb.project.acervodigital.exception.BusinessRuleException;
 import ufpb.project.acervodigital.exception.ItemNotFoundException;
 import ufpb.project.acervodigital.models.Reserva;
+import ufpb.project.acervodigital.models.User;
 import ufpb.project.acervodigital.models.enums.StatusEmprestimo;
 import ufpb.project.acervodigital.models.enums.StatusReserva;
 import ufpb.project.acervodigital.models.enums.StatusUsuario;
@@ -14,7 +14,6 @@ import ufpb.project.acervodigital.repositores.EmprestimoRepository;
 import ufpb.project.acervodigital.repositores.ReservaRepository;
 import ufpb.project.acervodigital.repositores.UserRepository;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -34,11 +33,9 @@ public class ReservaService {
     }
 
     @Transactional
-    public Reserva criaReserva(ReservaRequestDTO reservaDTO) {
-        var user = userRepositorio.findById(reservaDTO.getUserId())
-                .orElseThrow(() -> new ItemNotFoundException("Usuario "+reservaDTO.getUserId()+" não encontrado"));
-        var ativo = ativoRepository.findById(reservaDTO.getAtivoId())
-                .orElseThrow(() -> new ItemNotFoundException("Ativo "+reservaDTO.getAtivoId()+" não encontrado"));
+    public Reserva criaReserva(Long id_ativo, User user) {
+        var ativo = ativoRepository.findById(id_ativo)
+                .orElseThrow(() -> new ItemNotFoundException("Ativo "+id_ativo+" não encontrado"));
 
         if (user.getStatus() == StatusUsuario.SUSPENSO) {
             throw new BusinessRuleException("Usuário suspensos não podem fazer reservas");

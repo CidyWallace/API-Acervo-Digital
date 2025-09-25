@@ -1,17 +1,26 @@
 package ufpb.project.acervodigital.DTOs;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import ufpb.project.acervodigital.models.enums.StatusReserva;
 
 import java.time.LocalDateTime;
 
 public class ReservaResponseDTO {
+    @Schema(description = "Id da reserva")
     private Long id;
+    @Schema(description = "Id do usuário")
     private Long userId;
+    @Schema(description = "Nome do usuário")
     private String nomeUser;
+    @Schema(description = "Id do ativo digital")
     private Long ativoId;
+    @Schema(description = "Titulo do ativo digital")
     private String tituloAtivo;
+    @Schema(description = "Data que ocorreu a reserva")
     private LocalDateTime dataReserva;
+    @Schema(description = "Status da reserva (ATIVA, ATENDIDA, CANCELADA")
     private StatusReserva status;
+    @Schema(description = "Posição na fila em que o usuário se encontra")
     private Long posicaoFila;
 
     public Long getId() {
