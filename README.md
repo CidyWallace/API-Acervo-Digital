@@ -6,6 +6,7 @@ Este projeto é uma API REST para um Acervo Digital, desenvolvida utilizando o f
 
 Antes de começar, você precisará ter as seguintes ferramentas instaladas em sua máquina:
 - [Java Development Kit (JDK)](https://www.oracle.com/java/technologies/downloads/) - Versão 21 ou superior.
+- [PostgreSQL](https://www.postgresql.org/download/) - Banco de dados.
 - [Apache Maven](https://maven.apache.org/download.cgi) - Gerenciador de dependências e build.
 - [Git](https://git-scm.com/downloads) (Opcional) - Para clonar o repositório.
 
