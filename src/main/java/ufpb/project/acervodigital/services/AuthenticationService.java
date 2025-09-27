@@ -35,7 +35,7 @@ public class AuthenticationService {
         );
 
         var user = userRepository.findByEmail(authRequestDTO.getEmail())
-                .orElseThrow(() -> new ItemNotFoundException("suário não encontrado após autenticação bem-sucedida."));
+                .orElseThrow(() -> new ItemNotFoundException("Usuário não encontrado após autenticação bem-sucedida."));
 
         String token = jwtService.generateToken(user);
 
